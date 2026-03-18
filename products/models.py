@@ -79,8 +79,10 @@ class Product(models.Model):
         # 3. Dynamic Unsplash Fallback Map (Guarantees elegant high-quality images)
         cat_name = self.category_name.strip() if self.category_name else ""
         mapping = {
-            'Lipstick': 'photo-1586776101345-0e6d6232537c',
+            'Lipstick': 'photo-1631214500115-598fc2cb882e',
+            'lipstick': 'photo-1631214500115-598fc2cb882e',
             'Foundation': 'photo-1596704017254-9b121068fb31',
+            'foundation': 'photo-1596704017254-9b121068fb31',
             'Mascara': 'photo-1512496015851-a90fb38ba796',
             'Eyeshadow': 'photo-1503236123133-fb3d43d671ae',
             'Perfume': 'photo-1541643600914-78b084683601',
@@ -95,7 +97,7 @@ class Product(models.Model):
             'Lip Gloss': 'photo-1527736947477-2790e28f143c',
         }
         
-        photo_id = mapping.get(cat_name, 'photo-1620916566398-39f1143ab7be')
+        photo_id = mapping.get(cat_name, mapping.get(cat_name.lower(), 'photo-1620916566398-39f1143ab7be'))
         return f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&q=80&w=800"
 
     @property
