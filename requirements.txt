@@ -1,7 +1,5 @@
 # Core Django
 Django
-
-# Authentication and Session
 django-allauth
 django-cors-headers
 django-filter
@@ -26,11 +24,11 @@ cryptography
 twilio
 phonenumbers
 
-# Computer Vision & AI (Using Headless version for Render/Linux)
+# Computer Vision & AI - Optimized for Render
 opencv-python-headless
 opencv-contrib-python-headless
 mediapipe
-tensorflow
+tensorflow-cpu
 numpy
 matplotlib
 pyzbar
@@ -40,7 +38,7 @@ MarkupSafe
 sqlparse
 asgiref
 
-# Others
+# Dependencies
 idna
 urllib3
 certifi
