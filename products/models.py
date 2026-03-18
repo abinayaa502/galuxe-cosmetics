@@ -79,10 +79,14 @@ class Product(models.Model):
         # 3. Dynamic Unsplash Fallback Map (Guarantees elegant high-quality images)
         cat_name = self.category_name.strip() if self.category_name else ""
         mapping = {
-            'Lipstick': 'photo-1631214500115-598fc2cb882e',
-            'lipstick': 'photo-1631214500115-598fc2cb882e',
+            'Lipstick': [
+                'photo-1586776101345-0e6d6232537c', # Classic Red
+                'photo-1625093742435-6fa192c6df10', # Nude/Brown
+                'photo-1591360236480-4ed861025a18', # Coral/Pink
+                'photo-1527736947477-2790e28f143c', # Glossy/Wet
+                'photo-1631214500115-598fc2cb882e'  # Deep Wine
+            ],
             'Foundation': 'photo-1596704017254-9b121068fb31',
-            'foundation': 'photo-1596704017254-9b121068fb31',
             'Mascara': 'photo-1512496015851-a90fb38ba796',
             'Eyeshadow': 'photo-1503236123133-fb3d43d671ae',
             'Perfume': 'photo-1541643600914-78b084683601',
@@ -94,10 +98,16 @@ class Product(models.Model):
             'Beard Oil': 'photo-1522335789203-aabd1fc54bc9',
             'Shaving Cream': 'photo-1695048200681-c0333e837e2b',
             'Grooming Kit': 'photo-1590666270543-9cc2d5257f86',
-            'Lip Gloss': 'photo-1527736947477-2790e28f143c',
         }
         
-        photo_id = mapping.get(cat_name, mapping.get(cat_name.lower(), 'photo-1620916566398-39f1143ab7be'))
+        result = mapping.get(cat_name, mapping.get(cat_name.lower(), 'photo-1620916566398-39f1143ab7be'))
+        
+        # If it's a list (like Lipstick), pick one based on the product ID for variety
+        if isinstance(result, list):
+            photo_id = result[self.id % len(result)] if self.id else result[0]
+        else:
+            photo_id = result
+            
         return f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&q=80&w=800"
 
     @property
