@@ -24,15 +24,14 @@ cryptography
 twilio
 phonenumbers
 
-# Computer Vision & AI - Optimized for Render
-opencv-python-headless
-opencv-contrib-python-headless
-mediapipe
-tensorflow-cpu
-numpy
-matplotlib
-pyzbar
-MarkupSafe
+# Computer Vision & AI (Temporarily disabled for debugging)
+# opencv-python-headless
+# opencv-contrib-python-headless
+# mediapipe
+# tensorflow-cpu
+# numpy
+# matplotlib
+# pyzbar
 
 # Database and Async
 sqlparse
