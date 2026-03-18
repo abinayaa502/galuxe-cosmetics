@@ -165,6 +165,11 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION = 'none' # Disable email verification for easy signup
+
+# Email backend for development/simple production
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
