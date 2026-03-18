@@ -1,3 +1,4 @@
+# Core Django
 Django
 django-allauth
 django-cors-headers
@@ -8,13 +9,13 @@ python-dateutil
 pytz
 tzdata
 
-# Static Management
+# Static & Web Management
 gunicorn
 whitenoise
+requests
 
 # Utilities
 Pillow
-requests
 google-auth
 google-auth-oauthlib
 psycopg2-binary
@@ -22,14 +23,14 @@ cryptography
 twilio
 phonenumbers
 
-# AI (Disabled temporarily)
-# opencv-python-headless
-# opencv-contrib-python-headless
-# mediapipe
-# tensorflow-cpu
-# numpy
-# matplotlib
-# pyzbar
+# AI & Computer Vision - Light Versions
+opencv-python-headless
+opencv-contrib-python-headless
+mediapipe
+tensorflow-cpu
+numpy
+matplotlib
+pyzbar
 
 # Core Dependencies
 sqlparse

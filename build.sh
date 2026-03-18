@@ -6,5 +6,5 @@ pip install -r requirements.txt
 
 python manage.py collectstatic --no-input
 python manage.py migrate
-# Optional: Seed data if needed
-# python seed_v3_with_images.py
+# Seed products if empty (using the script I found)
+python seed_data.py
