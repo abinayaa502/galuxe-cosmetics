@@ -1,16 +1,14 @@
-# Core Django
 Django
 django-allauth
 django-cors-headers
 django-filter
 django-phonenumber-field
-# django-tailwind (removed to debug build error)
 djangorestframework
 python-dateutil
 pytz
 tzdata
 
-# Server & Static Management
+# Static Management
 gunicorn
 whitenoise
 
@@ -24,7 +22,7 @@ cryptography
 twilio
 phonenumbers
 
-# AI - Temporarily disabled for clean build
+# AI (Disabled temporarily)
 # opencv-python-headless
 # opencv-contrib-python-headless
 # mediapipe
@@ -33,11 +31,9 @@ phonenumbers
 # matplotlib
 # pyzbar
 
-# Database and Async
+# Core Dependencies
 sqlparse
 asgiref
-
-# Dependencies
 idna
 urllib3
 certifi
