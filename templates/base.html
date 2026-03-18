@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GALUXE | Minimalist Luxury Cosmetics{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        softPink: '#FFF5F6',
+                        roseGold: '#B76E79',
+                        deepRose: '#8C525A',
+                        cream: '#FDFBF7',
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #FDFBF7; font-family: 'Montserrat', sans-serif; }
+        .serif { font-family: 'Cormorant Garamond', serif; }
+        .glass-nav { background: rgba(255, 245, 246, 0.8); backdrop-filter: blur(15px); border-bottom: 1px solid rgba(183, 110, 121, 0.1); }
+        .btn-luxury { background: #B76E79; color: white; transition: all 0.4s ease; border: 1px solid #B76E79; }
+        .btn-luxury:hover { background: transparent; color: #B76E79; transform: translateY(-2px); }
+        .btn-outline { border: 1px solid #B76E79; color: #B76E79; transition: all 0.4s ease; }
+        .btn-outline:hover { background: #B76E79; color: white; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="text-gray-800 leading-relaxed">
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <a href="/" class="serif text-4xl font-light tracking-widest text-deepRose">GALUXE</a>
+            
+            <!-- Navigation Links -->
+            <div class="flex gap-8 text-[11px] uppercase tracking-[0.2em] font-medium text-gray-500">
+                <a href="/" class="hover:text-roseGold transition">Home</a>
+                <a href="/products/women/" class="hover:text-roseGold transition">Women</a>
+                <a href="/products/men/" class="hover:text-roseGold transition">Men</a>
+                <a href="/virtual-tryon/" class="text-roseGold font-bold hover:text-deepRose transition">Try-on</a>
+                <a href="/scanner/" class="hover:text-roseGold transition">Scan</a>
+            </div>
+
+            <!-- Search & Cart -->
+            <div class="flex items-center gap-6 w-full md:w-auto">
+                <form action="/products/" method="GET" class="relative group flex-1 md:flex-none">
+                    <input type="text" name="search" placeholder="Search..." class="bg-white/50 border border-gray-100 rounded-full pl-10 pr-4 py-2 text-xs focus:ring-1 focus:ring-roseGold focus:outline-none w-full transition-all duration-300 md:w-40 md:focus:w-64">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </form>
+                
+                <div class="flex items-center gap-5">
+                    <a href="/cart/" class="relative text-gray-600 hover:text-roseGold transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        {% if cart_count > 0 %}
+                        <span class="absolute -top-2 -right-2 bg-roseGold text-white text-[8px] font-bold w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                            {{ cart_count }}
+                        </span>
+                        {% endif %}
+                    </a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}" class="w-8 h-8 rounded-full border border-roseGold/20 flex items-center justify-center text-[10px] font-bold text-roseGold bg-softPink hover:bg-roseGold hover:text-white transition">
+                            {{ user.email|first|upper }}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}" class="text-[10px] uppercase font-semibold tracking-wider text-roseGold hover:text-deepRose transition">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="bg-white border-t border-roseGold/10 pt-20 pb-10 mt-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-16 text-center md:text-left">
+                <div class="md:col-span-1">
+                    <h2 class="serif text-3xl font-light tracking-widest text-deepRose mb-6">GALUXE</h2>
+                    <p class="text-xs text-gray-400 leading-relaxed uppercase tracking-widest">Minimalist Beauty.<br>Luxury Experience.</p>
+                </div>
+                <div>
+                    <h4 class="text-[11px] uppercase tracking-[0.2em] font-bold mb-8 text-gray-900">Collections</h4>
+                    <ul class="text-[11px] uppercase tracking-[0.1em] text-gray-500 space-y-4">
+                        <li><a href="/products/women/" class="hover:text-roseGold transition">Women's Makeup</a></li>
+                        <li><a href="/products/men/" class="hover:text-roseGold transition">Men's Grooming</a></li>
+                        <li><a href="/products/" class="hover:text-roseGold transition">New Arrivals</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[11px] uppercase tracking-[0.2em] font-bold mb-8 text-gray-900">Experience</h4>
+                    <ul class="text-[11px] uppercase tracking-[0.1em] text-gray-500 space-y-4">
+                        <li><a href="/virtual-tryon/" class="hover:text-roseGold transition">AI Try-On</a></li>
+                        <li><a href="/scanner/" class="hover:text-roseGold transition">Barcode Scan</a></li>
+                        <li><a href="#" class="hover:text-roseGold transition">Beauty Tips</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-[11px] uppercase tracking-[0.2em] font-bold mb-8 text-gray-900">Contact</h4>
+                    <p class="text-[11px] text-gray-500 tracking-[0.1em]">support@galuxe.com<br>1-800-GALUXE</p>
+                </div>
+            </div>
+            <div class="mt-20 pt-8 border-t border-gray-50 flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="text-[9px] uppercase tracking-[0.3em] text-gray-400">© 2026 GALUXE Cosmetics. All Rights Reserved.</p>
+                <div class="flex gap-8">
+                     <!-- Social links placeholder -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

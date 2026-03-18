@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Your Beauty Bag | GALUXE{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-32">
+    <div class="space-y-12">
+        <div class="text-center space-y-4">
+            <h1 class="serif text-6xl font-light text-gray-900">Beauty Bag</h1>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-gray-400">Total Selection ({{ items.count }})</p>
+        </div>
+
+        {% if items %}
+        <div class="bg-white rounded-[60px] p-12 border border-roseGold/5 shadow-2xl">
+            <div class="divide-y divide-roseGold/5">
+                {% for item in items %}
+                <div class="py-10 flex gap-10 items-center">
+                    <div class="w-32 h-32 rounded-[30px] overflow-hidden bg-cream shrink-0">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1 space-y-2">
+                        <p class="text-[9px] uppercase tracking-[0.2em] font-bold text-roseGold">{{ item.product.brand }}</p>
+                        <h3 class="serif text-2xl font-light text-gray-900">{{ item.product.name }}</h3>
+                        <p class="text-[10px] uppercase tracking-widest text-gray-400">Quantity: {{ item.quantity }}</p>
+                    </div>
+                    <div class="text-right space-y-4">
+                        <p class="text-xl font-medium text-gray-900">₹{{ item.subtotal|floatformat:0 }}</p>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="text-[9px] uppercase tracking-[0.2em] font-bold text-gray-300 hover:text-roseGold transition">Remove</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="mt-12 pt-12 border-t border-roseGold/10 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div class="text-center md:text-left">
+                    <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-2">Estimated Total</p>
+                    <p class="text-5xl font-light text-gray-900">₹{{ total|floatformat:0 }}</p>
+                </div>
+                <div class="w-full md:w-auto">
+                    <a href="/orders/checkout/" class="btn-luxury px-16 py-6 rounded-2xl block text-[11px] uppercase tracking-[0.2em] font-bold shadow-xl shadow-roseGold/20">Proceed to Checkout</a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="py-20 text-center space-y-10">
+            <div class="w-32 h-32 bg-cream rounded-full mx-auto flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-roseGold/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+            </div>
+            <p class="serif text-3xl font-light text-gray-300 uppercase tracking-widest">Your bag is empty</p>
+            <a href="/products/" class="btn-luxury px-12 py-5 rounded-full inline-block text-[11px] uppercase tracking-[0.2em] font-bold">Start Shopping</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

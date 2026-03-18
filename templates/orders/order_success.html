@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Order Confirmed | GALUXE{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-40">
+    <div class="bg-white rounded-[60px] p-24 text-center space-y-12 border border-roseGold/5 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-roseGold/0 via-roseGold/50 to-roseGold/0"></div>
+        
+        <div class="w-24 h-24 bg-softPink rounded-full mx-auto flex items-center justify-center animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-roseGold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 13l4 4L19 7" />
+            </svg>
+        </div>
+
+        <div class="space-y-6">
+            <h1 class="serif text-5xl font-light text-gray-900">Your order is <span class="italic text-roseGold">confirmed</span></h1>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-gray-400">Order ID: #GLX-{{ order.id }}</p>
+            {% if order.tracking_id %}
+            <p class="text-[11px] uppercase tracking-[0.2em] font-bold text-gray-900">Tracking ID: {{ order.tracking_id }}</p>
+            {% endif %}
+        </div>
+
+        <div class="max-w-xs mx-auto pt-10 border-t border-roseGold/10">
+            <p class="text-sm text-gray-400 leading-loose">We are preparing your luxury selection for shipment. You will receive an update once it departs our maison.</p>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-6 justify-center pt-8">
+            <a href="/orders/my-orders/" class="btn-outline px-12 py-5 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold">Track Manifest</a>
+            <a href="/" class="btn-luxury px-12 py-5 rounded-full text-[10px] uppercase tracking-[0.2em] font-bold">Return Home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

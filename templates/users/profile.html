@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | GALUXE{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-16">
+        <!-- Sidebar -->
+        <aside class="space-y-8">
+            <div class="bg-white rounded-[40px] p-10 border border-gray-50 shadow-[0_20px_60px_rgba(183,110,121,0.03)] text-center">
+                <div class="w-24 h-24 rounded-full bg-softPink text-roseGold flex items-center justify-center text-4xl font-light mx-auto mb-6 border-2 border-white shadow-lg">
+                    {{ user.email|first|upper }}
+                </div>
+                <h2 class="serif text-2xl font-light text-gray-900 mb-1">{{ user.email }}</h2>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold">Standard Member</p>
+                
+                <div class="mt-10 pt-10 border-t border-gray-50 space-y-4 text-left">
+                    <a href="#" class="block text-xs uppercase tracking-widest text-roseGold font-bold">Account Details</a>
+                    <a href="{% url 'account_logout' %}" class="block text-xs uppercase tracking-widest text-gray-400 hover:text-red-500 transition">Logout</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-2 space-y-12">
+            <div class="bg-white rounded-[40px] p-12 border border-gray-50 shadow-[0_20px_60px_rgba(183,110,121,0.03)]">
+                <h3 class="serif text-3xl font-light text-gray-900 mb-8 pb-4 border-b border-gray-50">Recent Orders</h3>
+                <div class="py-20 text-center border-2 border-dashed border-gray-50 rounded-[30px]">
+                    <p class="serif text-xl font-light text-gray-300 uppercase tracking-widest">No orders yet</p>
+                    <a href="/products/" class="btn-luxury inline-block px-10 py-4 rounded-full text-[10px] uppercase tracking-widest font-bold mt-8 shadow-md">Start Shopping</a>
+                </div>
+            </div>
+
+            <div class="bg-softPink/20 rounded-[40px] p-12 border border-roseGold/5">
+                <h3 class="serif text-2xl font-light text-deepRose mb-6">Exclusive Perks</h3>
+                <ul class="space-y-4 text-xs text-gray-500 uppercase tracking-widest leading-loose">
+                    <li>• Complimentary high-definition AI skin analysis</li>
+                    <li>• Early access to rose gold collection</li>
+                    <li>• Free shipping on orders over ₹2000</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

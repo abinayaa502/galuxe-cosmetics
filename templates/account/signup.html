@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load account socialaccount %}
+
+{% block title %}Register | GALUXE{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center px-6 py-20 bg-softPink/30">
+    <div class="max-w-md w-full bg-white rounded-[40px] p-10 md:p-12 shadow-[0_40px_100px_rgba(183,110,121,0.08)] border border-roseGold/5">
+        <div class="text-center mb-10">
+            <h2 class="serif text-4xl font-light text-gray-900 mb-4 tracking-tight">Create Account</h2>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-roseGold font-bold">Join the luxury experience</p>
+        </div>
+
+        {% if form.errors %}
+        <div class="mb-8 p-4 bg-red-50 rounded-2xl border border-red-100">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p class="text-[10px] text-red-600 uppercase tracking-widest">{{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <p class="text-[10px] text-red-600 uppercase tracking-widest">{{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'account_signup' %}" class="space-y-6">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                {% if field.name != 'captcha' %}
+                <div class="space-y-2">
+                    <label for="{{ field.id_for_label }}" class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-500 ml-4">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type|default:'text' }}" 
+                           name="{{ field.name }}" 
+                           id="{{ field.id_for_label }}"
+                           placeholder="{{ field.label }}" 
+                           {% if field.field.required %}required{% endif %}
+                           class="w-full bg-cream border-none rounded-2xl px-6 py-4 text-sm focus:ring-1 focus:ring-roseGold focus:outline-none transition-all placeholder:text-gray-300">
+                </div>
+                {% endif %}
+            {% endfor %}
+
+            <div class="pt-4">
+                <button type="submit" class="w-full btn-luxury py-5 rounded-2xl text-[11px] uppercase tracking-[0.3em] font-bold shadow-lg shadow-roseGold/20">
+                    Register
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-12 text-center">
+            <p class="text-[11px] uppercase tracking-widest text-gray-400">
+                Already have an account? 
+                <a href="{% url 'account_login' %}" class="text-roseGold font-bold hover:underline">Sign In</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

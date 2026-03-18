@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Scan Product | GALUXE{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold">Product <span class="text-rose-500">Scanner</span></h1>
+        <p class="text-gray-500 mt-2">Scan any beauty product barcode to find it in our store.</p>
+    </div>
+
+    <div class="relative bg-black rounded-3xl overflow-hidden aspect-square max-w-md mx-auto shadow-2xl border-4 border-white">
+        <div id="interactive" class="viewport h-full w-full"></div>
+        <!-- Scanning line -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-rose-500 shadow-[0_0_15px_#fb7185] animate-scan z-20"></div>
+        
+        <div id="result-overlay" class="hidden absolute inset-0 bg-white/95 flex flex-col items-center justify-center p-8 text-center z-30">
+            <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mb-4">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Product Found!</h2>
+            <p id="barcode-num" class="text-gray-500 mb-6 font-mono"></p>
+            <a id="product-link" href="/products/" class="bg-rose-500 text-white px-8 py-3 rounded-full font-bold">View Product</a>
+        </div>
+    </div>
+
+    <div class="mt-12 text-center">
+        <p class="text-sm text-gray-400">Position the barcode within the frame</p>
+    </div>
+</div>
+
+<style>
+    @keyframes scan {
+        from { top: 10%; }
+        to { top: 90%; }
+    }
+    .animate-scan { animation: scan 2s linear infinite; }
+    #interactive canvas, #interactive video { width: 100%; height: 100%; object-cover: cover; }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+<script>
+    Quagga.init({
+        inputStream : {
+            name : "Live",
+            type : "LiveStream",
+            target: document.querySelector('#interactive')
+        },
+        decoder : {
+            readers : ["code_128_reader", "ean_reader", "ean_8_reader", "code_39_reader"]
+        }
+    }, function(err) {
+        if (err) {
+            console.log(err);
+            return
+        }
+        Quagga.start();
+    });
+
+    Quagga.onDetected(function(data) {
+        const code = data.codeResult.code;
+        document.getElementById('barcode-num').innerText = "Barcode: " + code;
+        document.getElementById('result-overlay').classList.remove('hidden');
+        Quagga.stop();
+        // Redirect logic would go here
+    });
+</script>
+{% endblock %}

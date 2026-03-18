@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | GALUXE{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-32">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-start">
+
+        <!-- Image Section -->
+        <div class="sticky top-40">
+            <div
+                class="relative aspect-square rounded-[60px] overflow-hidden bg-cream shadow-2xl border border-roseGold/5 group">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}"
+                    class="w-full h-full object-cover transition-all duration-[2s] group-hover:scale-110">
+                {% if product.discount > 0 %}
+                <div
+                    class="absolute top-8 left-8 bg-gray-900 text-white text-[11px] font-bold px-6 py-2 rounded-full uppercase tracking-[0.2em]">
+                    Special Offer -{{ product.discount }}%
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Info Section -->
+        <div class="space-y-12">
+            <div class="space-y-6">
+                <div class="flex items-center gap-4">
+                    <span class="text-[11px] uppercase tracking-[0.4em] font-bold text-roseGold">{{ product.brand_name
+                        }}</span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-roseGold/20"></span>
+                    <span class="text-[11px] uppercase tracking-[0.4em] font-medium text-gray-400">{{
+                        product.category_name }}</span>
+                </div>
+                <h1 class="serif text-6xl font-light text-gray-900 leading-tight">{{ product.name }}</h1>
+                <div class="flex items-center gap-4">
+                    <div class="flex text-roseGold text-lg">
+                        {% for i in "12345" %}
+                        <span
+                            class="{% if forloop.counter <= product.rating %}text-roseGold{% else %}text-roseGold/20{% endif %}">★</span>
+                        {% endfor %}
+                    </div>
+                    <span class="text-[10px] uppercase font-bold tracking-widest text-gray-400">({{ product.rating }} /
+                        5.0)</span>
+                </div>
+            </div>
+
+            <div class="flex items-baseline gap-6 border-y border-roseGold/10 py-10">
+                <span class="text-5xl font-light text-gray-900">₹{{ product.discounted_price|floatformat:0 }}</span>
+                {% if product.discount > 0 %}
+                <span class="text-xl text-gray-300 line-through">₹{{ product.price|floatformat:0 }}</span>
+                {% endif %}
+            </div>
+
+            <div class="space-y-8">
+                <div class="grid grid-cols-2 gap-8">
+                    {% if product.shade %}
+                    <div>
+                        <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-900 mb-4">Shade / Variant
+                        </h4>
+                        <div
+                            class="px-6 py-4 rounded-2xl bg-white border border-roseGold/20 text-xs font-medium text-roseGold inline-block">
+                            {{ product.shade }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if product.skin_type %}
+                    <div>
+                        <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-900 mb-4">Skin Type</h4>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest font-medium">{{ product.skin_type }}
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="space-y-6">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-900">Description</h4>
+                    <p class="text-sm text-gray-400 leading-relaxed max-w-lg">{{ product.description }}</p>
+                </div>
+
+                <div class="flex items-center gap-6 pt-10">
+                    <div class="flex-1">
+                        <form action="{% url 'add_to_cart' product.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button
+                                class="w-full btn-luxury py-6 rounded-2xl text-[11px] uppercase tracking-[0.2em] font-bold shadow-xl shadow-roseGold/20">Add
+                                to Beauty Bag</button>
+                        </form>
+                    </div>
+                    <button
+                        class="w-20 h-20 rounded-2xl border border-roseGold/20 flex items-center justify-center text-roseGold hover:bg-roseGold hover:text-white transition group">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Perks -->
+            <div class="grid grid-cols-3 gap-8 pt-12 border-t border-roseGold/5">
+                <div class="text-center space-y-3">
+                    <div class="text-roseGold text-lg italic serif">Vegan</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Cruelty Free</p>
+                </div>
+                <div class="text-center space-y-3 border-x border-roseGold/10">
+                    <div class="text-roseGold text-lg italic serif">Pure</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Clean Formula</p>
+                </div>
+                <div class="text-center space-y-3">
+                    <div class="text-roseGold text-lg italic serif">Luxury</div>
+                    <p class="text-[9px] uppercase tracking-widest text-gray-400">Premium Grade</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}My Orders | GALUXE{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-6 py-32">
+    <div class="space-y-16">
+        <div class="space-y-4">
+            <h1 class="serif text-6xl font-light text-gray-900">Order History</h1>
+            <p class="text-[10px] uppercase tracking-[0.4em] text-gray-400">Your curated collection</p>
+        </div>
+
+        {% if orders %}
+        <div class="space-y-10">
+            {% for order in orders %}
+            <div class="bg-white rounded-[40px] p-10 border border-roseGold/5 hover:shadow-xl transition-all duration-500">
+                <div class="flex flex-col md:flex-row justify-between items-baseline gap-6 mb-10 pb-10 border-b border-roseGold/5">
+                    <div class="space-y-2">
+                        <p class="text-[10px] uppercase tracking-[0.3em] font-bold text-roseGold">Reference #GLX-{{ order.id }}</p>
+                        <p class="text-xs text-gray-400 uppercase tracking-widest">{{ order.created_at|date:"F d, Y" }}</p>
+                    </div>
+                    <div class="flex items-center gap-8">
+                        <div class="text-right">
+                            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 mb-1">Total</p>
+                            <p class="text-2xl font-light text-gray-900">₹{{ order.total_price|floatformat:0 }}</p>
+                        </div>
+                        <span class="px-6 py-2 rounded-full bg-softPink text-[9px] uppercase tracking-[0.2em] font-bold text-roseGold">{{ order.status }}</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-900">Items</h4>
+                        <div class="space-y-4">
+                            {% for item in order.items.all %}
+                            <div class="flex justify-between text-xs text-gray-400 uppercase tracking-widest">
+                                <span>{{ item.product.name }} × {{ item.quantity }}</span>
+                                <span class="text-gray-900">₹{{ item.price|floatformat:0 }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-900">Destination</h4>
+                        <div class="text-xs text-gray-400 leading-relaxed uppercase tracking-widest">
+                            <p>{{ order.address_line }}</p>
+                            <p>{{ order.city }}, {{ order.state }}</p>
+                            <p>{{ order.pin_code }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% if order.tracking_id %}
+                <div class="mt-10 pt-8 border-t border-roseGold/5 flex items-center justify-between">
+                    <p class="text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400">Tracking Status</p>
+                    <div class="flex items-center gap-4">
+                        <span class="text-[11px] font-bold tracking-widest text-gray-900">{{ order.tracking_id }}</span>
+                        <span class="text-[10px] uppercase tracking-widest text-roseGold font-bold px-3 py-1 bg-softPink rounded-md animate-pulse">{{ order.status }}</span>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="py-20 text-center space-y-10 bg-cream rounded-[60px]">
+            <p class="serif text-3xl font-light text-gray-300 uppercase tracking-widest">No orders yet</p>
+            <a href="/products/" class="btn-luxury px-12 py-5 rounded-full inline-block text-[11px] uppercase tracking-[0.2em] font-bold">Explore Collection</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

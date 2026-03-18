@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% block title %}Scan Face | AI Virtual Try-on{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto px-6 py-12">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900">Virtual Makeup <span class="text-rose-500">Try-on</span></h1>
+        <p class="text-gray-500 mt-2">See how our products look on you instantly.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Controls -->
+        <div class="lg:col-span-1 space-y-8 order-2 lg:order-1">
+            <div class="bg-white p-6 rounded-3xl border border-rose-100 shadow-xl">
+                <h3 class="font-bold mb-4">Choose Product type</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="setMakeup('lipstick')" class="makeup-btn active py-3 rounded-2xl border-2 border-rose-200 text-rose-500 font-bold hover:bg-rose-50 transition">Lipstick</button>
+                    <button onclick="setMakeup('blush')" class="makeup-btn py-3 rounded-2xl border-2 border-transparent bg-gray-50 text-gray-500 font-bold hover:border-gray-200 transition">Blush</button>
+                    <button onclick="setMakeup('eyeliner')" class="makeup-btn py-3 rounded-2xl border-2 border-transparent bg-gray-50 text-gray-500 font-bold hover:border-gray-200 transition">Eyeliner</button>
+                    <button onclick="setMakeup('foundation')" class="makeup-btn py-3 rounded-2xl border-2 border-transparent bg-gray-50 text-gray-500 font-bold hover:border-gray-200 transition">Foundation</button>
+                    <button onclick="setMakeup('none')" class="makeup-btn py-3 rounded-2xl border-2 border-transparent bg-black/5 text-gray-400 font-bold hover:border-gray-200 transition">Reset</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-3xl border border-rose-100 shadow-xl">
+                <h3 class="font-bold mb-4">Select Shade</h3>
+                <div class="flex flex-wrap gap-4">
+                    <div onclick="setColor('#BE123C')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white ring-2 ring-rose-200" style="background-color: #BE123C;"></div>
+                    <div onclick="setColor('#E11D48')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #E11D48;"></div>
+                    <div onclick="setColor('#F43F5E')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #F43F5E;"></div>
+                    <!-- Skin Tones -->
+                    <div onclick="setColor('#F3CFB6')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #F3CFB6;"></div>
+                    <div onclick="setColor('#E7C1B1')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #E7C1B1;"></div>
+                    <div onclick="setColor('#D69C7E')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #D69C7E;"></div>
+                    <div onclick="setColor('#8D5524')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #8D5524;"></div>
+                    <div onclick="setColor('#C68642')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #C68642;"></div>
+                    <div onclick="setColor('#000000')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #000000;"></div>
+                </div>
+            </div>
+            
+            <button class="w-full bg-rose-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-rose-200 transition hover:bg-rose-600">Buy Current Shade</button>
+        </div>
+
+        <!-- Webcam View -->
+        <div class="lg:col-span-2 order-1 lg:order-2">
+            <div class="relative w-full aspect-video rounded-3xl overflow-hidden bg-black shadow-2xl border-4 border-white">
+                <video id="webcam" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" autoplay playsinline></video>
+                <canvas id="canvas" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]"></canvas>
+                
+                <div id="loader" class="absolute inset-0 flex flex-col items-center justify-center bg-gray-900/80 text-white">
+                    <div class="w-12 h-12 border-4 border-rose-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+                    <p class="font-bold">Initializing AI Face Detection...</p>
+                </div>
+            </div>
+            <div class="flex justify-center gap-4 mt-6">
+                 <button id="toggleBtn" class="bg-gray-800 text-white px-8 py-3 rounded-xl font-bold">Start Camera</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .makeup-btn.active { border-color: #fb7185; background: #fff1f2; color: #f43f5e; }
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+<script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils"></script>
+
+<script>
+    const videoElement = document.getElementById('webcam');
+    const canvasElement = document.getElementById('canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+    const loader = document.getElementById('loader');
+    
+    let currentMakeup = 'lipstick';
+    let currentColor = '#BE123C';
+
+    function setMakeup(type) {
+        currentMakeup = type;
+        document.querySelectorAll('.makeup-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    function setColor(color) {
+        currentColor = color;
+        document.querySelectorAll('.ring-rose-200').forEach(el => el.classList.remove('ring-rose-200', 'ring-2'));
+        event.target.classList.add('ring-rose-200', 'ring-2');
+    }
+
+    function onResults(results) {
+        loader.style.display = 'none';
+        canvasCtx.save();
+        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+        
+        if (results.multiFaceLandmarks) {
+            for (const landmarks of results.multiFaceLandmarks) {
+                // Apply Makeup
+                if (currentMakeup === 'lipstick') {
+                    drawLipstick(landmarks);
+                } else if (currentMakeup === 'blush') {
+                    drawBlush(landmarks);
+                } else if (currentMakeup === 'eyeliner') {
+                    drawEyeliner(landmarks);
+                } else if (currentMakeup === 'foundation') {
+                    drawFoundation(landmarks);
+                }
+            }
+        }
+        canvasCtx.restore();
+    }
+
+    function drawEyeliner(landmarks) {
+        // Left eye upper lid indices
+        const leftEyeUpper = [33, 161, 160, 159, 158, 157, 173, 133, 246, 161];
+        // Right eye upper lid indices
+        const rightEyeUpper = [263, 388, 387, 386, 385, 384, 398, 362, 466, 388];
+        
+        canvasCtx.strokeStyle = currentColor;
+        canvasCtx.lineWidth = 3;
+        canvasCtx.lineJoin = 'round';
+        canvasCtx.lineCap = 'round';
+        canvasCtx.globalAlpha = 0.8;
+
+        const drawLid = (indices) => {
+            canvasCtx.beginPath();
+            indices.forEach((idx, i) => {
+                const point = landmarks[idx];
+                if (i === 0) canvasCtx.moveTo(point.x * canvasElement.width, point.y * canvasElement.height);
+                else canvasCtx.lineTo(point.x * canvasElement.width, point.y * canvasElement.height);
+            });
+            canvasCtx.stroke();
+        };
+
+        drawLid(leftEyeUpper);
+        drawLid(rightEyeUpper);
+        canvasCtx.globalAlpha = 1.0;
+    }
+
+    function drawFoundation(landmarks) {
+        // Face oval indices for full face coverage
+        const oval = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109];
+        
+        canvasCtx.beginPath();
+        canvasCtx.fillStyle = currentColor;
+        canvasCtx.globalAlpha = 0.2; // Very subtle for foundation
+        
+        oval.forEach((idx, i) => {
+            const point = landmarks[idx];
+            if (i === 0) canvasCtx.moveTo(point.x * canvasElement.width, point.y * canvasElement.height);
+            else canvasCtx.lineTo(point.x * canvasElement.width, point.y * canvasElement.height);
+        });
+        
+        canvasCtx.closePath();
+        canvasCtx.fill();
+        
+        // Soften edges
+        canvasCtx.filter = 'blur(10px)';
+        canvasCtx.fill();
+        canvasCtx.filter = 'none';
+        canvasCtx.globalAlpha = 1.0;
+    }
+
+    function drawLipstick(landmarks) {
+        // Upper Lip Outer
+        const upperLipOuter = [61, 185, 40, 39, 37, 0, 267, 269, 270, 408, 291];
+        // Upper Lip Inner (reverse to match outer flow)
+        const upperLipInner = [308, 415, 310, 311, 312, 13, 82, 81, 80, 191, 78];
+        
+        // Lower Lip Outer
+        const lowerLipOuter = [61, 146, 91, 181, 84, 17, 314, 405, 321, 375, 291];
+        // Lower Lip Inner (reverse to match outer flow)
+        const lowerLipInner = [308, 324, 318, 402, 317, 14, 87, 178, 88, 95, 78];
+        
+        // Draw Upper Lip
+        drawLipPolygon(landmarks, [...upperLipOuter, ...upperLipInner]);
+        // Draw Lower Lip
+        drawLipPolygon(landmarks, [...lowerLipOuter, ...lowerLipInner]);
+        
+        // Add multiple shine/highlight points for realism
+        addLipGloss(landmarks, 14, 20); // Center lower
+        addLipGloss(landmarks, 13, 10); // Center upper
+    }
+
+    function drawLipPolygon(landmarks, indices) {
+        canvasCtx.beginPath();
+        canvasCtx.fillStyle = currentColor + '77'; // Semi-transparent for natural look
+        indices.forEach((idx, i) => {
+            const point = landmarks[idx];
+            if (i === 0) canvasCtx.moveTo(point.x * canvasElement.width, point.y * canvasElement.height);
+            else canvasCtx.lineTo(point.x * canvasElement.width, point.y * canvasElement.height);
+        });
+        canvasCtx.closePath();
+        canvasCtx.fill();
+        
+        // Soft feathering effect
+        canvasCtx.filter = 'blur(2px)';
+        canvasCtx.fill();
+        canvasCtx.filter = 'none';
+    }
+
+    function addLipGloss(landmarks, centerIdx, size) {
+        const point = landmarks[centerIdx];
+        const x = point.x * canvasElement.width;
+        const y = point.y * canvasElement.height;
+        
+        const gradient = canvasCtx.createRadialGradient(x, y, 0, x, y, size);
+        gradient.addColorStop(0, 'rgba(255,255,255,0.4)');
+        gradient.addColorStop(0.5, 'rgba(255,255,255,0.1)');
+        gradient.addColorStop(1, 'rgba(255,255,255,0)');
+        
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.beginPath();
+        canvasCtx.arc(x, y, size, 0, Math.PI * 2);
+        canvasCtx.fill();
+    }
+
+    function drawBlush(landmarks) {
+        // Blush areas: cheeks (approx 205, 425)
+        const leftCheek = landmarks[205];
+        const rightCheek = landmarks[425];
+        
+        canvasCtx.globalAlpha = 0.3;
+        canvasCtx.fillStyle = currentColor;
+        
+        // Left
+        canvasCtx.beginPath();
+        canvasCtx.arc(leftCheek.x * canvasElement.width, leftCheek.y * canvasElement.height, 20, 0, 2 * Math.PI);
+        canvasCtx.fill();
+        
+        // Right
+        canvasCtx.beginPath();
+        canvasCtx.arc(rightCheek.x * canvasElement.width, rightCheek.y * canvasElement.height, 20, 0, 2 * Math.PI);
+        canvasCtx.fill();
+        canvasCtx.globalAlpha = 1.0;
+    }
+
+    const faceMesh = new FaceMesh({locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+    }});
+
+    faceMesh.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5
+    });
+
+    faceMesh.onResults(onResults);
+
+    const camera = new Camera(videoElement, {
+        onFrame: async () => {
+            canvasElement.width = videoElement.videoWidth;
+            canvasElement.height = videoElement.videoHeight;
+            await faceMesh.send({image: videoElement});
+        },
+        width: 1280,
+        height: 720
+    });
+
+    document.getElementById('toggleBtn').onclick = () => {
+        camera.start();
+        document.getElementById('toggleBtn').style.display = 'none';
+    };
+</script>
+{% endblock %}

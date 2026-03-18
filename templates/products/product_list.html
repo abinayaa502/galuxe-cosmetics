@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}GALUXE | Our Collection{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-20">
+    <div class="flex flex-col lg:flex-row gap-16">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-full lg:w-64 space-y-12">
+            <div>
+                <h3 class="serif text-2xl font-light text-gray-900 mb-8 border-b border-roseGold/10 pb-4">Refine By</h3>
+                
+                <!-- Category -->
+                <div class="mb-10">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-roseGold mb-6">Category</h4>
+                    <div class="space-y-3">
+                        <a href="?{% if current_brand %}brand={{ current_brand }}&{% endif %}{% if current_gender %}gender={{ current_gender }}&{% endif %}" class="block text-xs uppercase tracking-widest {% if not current_category %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">All Categories</a>
+                        {% for cat in categories %}
+                        <a href="?category={{ cat }}{% if current_brand %}&brand={{ current_brand }}{% endif %}{% if current_gender %}&gender={{ current_gender }}{% endif %}" class="block text-xs uppercase tracking-widest {% if current_category == cat %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">{{ cat }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Brand -->
+                <div class="mb-10">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-roseGold mb-6">Brand</h4>
+                    <div class="space-y-3">
+                        <a href="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_gender %}gender={{ current_gender }}&{% endif %}" class="block text-xs uppercase tracking-widest {% if not current_brand %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">All Brands</a>
+                        {% for brand in brands %}
+                        <a href="?brand={{ brand }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_gender %}&gender={{ current_gender }}{% endif %}" class="block text-xs uppercase tracking-widest {% if current_brand == brand %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">{{ brand }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Skin Type -->
+                <div class="mb-10">
+                    <h4 class="text-[10px] uppercase tracking-[0.2em] font-bold text-roseGold mb-6">Skin Type</h4>
+                    <div class="space-y-3">
+                        <a href="?{% if current_category %}category={{ current_category }}&{% endif %}{% if current_brand %}brand={{ current_brand }}&{% endif %}" class="block text-xs uppercase tracking-widest {% if not current_skin_type %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">Any</a>
+                        {% for st in skin_types %}
+                        <a href="?skin_type={{ st }}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_brand %}&brand={{ current_brand }}{% endif %}" class="block text-xs uppercase tracking-widest {% if current_skin_type == st %}text-roseGold font-bold{% else %}text-gray-400 hover:text-roseGold{% endif %} transition">{{ st }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Product Grid -->
+        <main class="flex-1">
+            <div class="flex justify-between items-baseline mb-12">
+                <h2 class="serif text-4xl font-light text-gray-900">
+                    {% if current_category %}{{ current_category }}{% elif current_gender %}{{ current_gender }}'s Collection{% else %}All Products{% endif %}
+                </h2>
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-medium">{{ products.count }} Results</p>
+            </div>
+
+            {% if products %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                {% for product in products %}
+                <div class="group relative bg-white p-6 rounded-[40px] border border-gray-50 flex flex-col items-center text-center hover:shadow-[0_40px_80px_rgba(183,110,121,0.05)] transition-all duration-500">
+                    <a href="{% url 'product_detail' product.pk %}" class="w-full">
+                        <div class="relative w-full aspect-square rounded-[30px] overflow-hidden mb-8 bg-cream">
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-all duration-[1s]">
+                            {% if product.discount > 0 %}
+                            <div class="absolute top-4 left-4 bg-gray-900 text-white text-[9px] font-bold px-3 py-1.5 rounded-full uppercase tracking-widest">
+                                -{{ product.discount }}%
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-1 w-full space-y-2">
+                            <p class="text-[9px] uppercase tracking-[0.3em] text-roseGold font-bold">{{ product.brand_name }}</p>
+                            <h3 class="serif text-xl font-light text-gray-900 line-clamp-1">{{ product.name }}</h3>
+                            <div class="flex items-center justify-center gap-3 mt-4">
+                                <span class="text-lg font-medium">₹{{ product.discounted_price|floatformat:0 }}</span>
+                                {% if product.discount > 0 %}
+                                <span class="text-xs text-gray-300 line-through">₹{{ product.price|floatformat:0 }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Add to Bag -->
+                    <div class="mt-8 w-full opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                        <form action="{% url 'add_to_cart' product.pk %}" method="POST">
+                            {% csrf_token %}
+                            <button class="w-full btn-luxury py-4 rounded-2xl text-[10px] uppercase tracking-widest font-bold">Add to Bag</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="py-32 text-center">
+                <p class="serif text-3xl font-light text-gray-300 uppercase tracking-widest">No products found</p>
+                <a href="/products/" class="text-[10px] uppercase tracking-widest text-roseGold font-bold mt-4 inline-block border-b border-roseGold">Clear Filters</a>
+            </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}
