@@ -203,10 +203,6 @@
         drawLipPolygon(landmarks, [...upperLipOuter, ...upperLipInner]);
         // Draw Lower Lip
         drawLipPolygon(landmarks, [...lowerLipOuter, ...lowerLipInner]);
-        
-        // Add multiple shine/highlight points for realism
-        addLipGloss(landmarks, 14, 15); // Center lower
-        addLipGloss(landmarks, 13, 8);  // Center upper
     }
 
     function drawLipPolygon(landmarks, indices) {
