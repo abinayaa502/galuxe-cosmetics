@@ -36,11 +36,21 @@ def seed_data():
         obj, _ = Brand.objects.get_or_create(name=b_name)
         brand_objs[b_name] = obj
 
+    lipstick_images = [
+        "https://images.unsplash.com/photo-1586776101345-0e6d6232537c?w=800", # Red
+        "https://images.unsplash.com/photo-1625093742435-6fa192c6df10?w=800", # Nude
+        "https://images.unsplash.com/photo-1591360236480-4ed861025a18?w=800", # Pink
+        "https://images.unsplash.com/photo-1527736947477-2790e28f143c?w=800", # Glossy
+        "https://images.unsplash.com/photo-1631214500115-598fc2cb882e?w=800"  # Wine
+    ]
+
     print("🌱 Seeding products...")
     for i in range(1, 61):
         brand_name = random.choice(brands_list)
         cat_key = random.choice(list(categories_dict.keys()))
         shade_suffix = random.choice(categories_dict[cat_key])
+        
+        image_url = random.choice(lipstick_images) if cat_key == "Lipstick" else ""
         
         gender = "Men" if cat_key == "Men" or "Men" in brand_name else "Women"
         
@@ -54,14 +64,15 @@ def seed_data():
             name=name,
             brand_ref=brand_objs[brand_name],
             category_ref=cat_objs[cat_key],
-            brand=brand_name,  # Legacy support
-            category=cat_key,  # Legacy support
+            brand=brand_name,
+            category=cat_key,
             gender=gender,
             price=price,
             discount=discount,
             rating=rating,
             description=f"Premium {cat_key} from {brand_name}. Designed for a luxury finish and lasting glow.",
             image="placeholder.jpg",
+            image_external_url=image_url,
             stock=stock,
             is_trending=(i < 15)
         )
