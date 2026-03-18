@@ -23,17 +23,31 @@
 
             <div class="bg-white p-6 rounded-3xl border border-rose-100 shadow-xl">
                 <h3 class="font-bold mb-4">Select Shade</h3>
-                <div class="flex flex-wrap gap-4">
-                    <div onclick="setColor('#BE123C')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white ring-2 ring-rose-200" style="background-color: #BE123C;"></div>
-                    <div onclick="setColor('#E11D48')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #E11D48;"></div>
-                    <div onclick="setColor('#F43F5E')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #F43F5E;"></div>
-                    <!-- Skin Tones -->
-                    <div onclick="setColor('#F3CFB6')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #F3CFB6;"></div>
-                    <div onclick="setColor('#E7C1B1')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #E7C1B1;"></div>
-                    <div onclick="setColor('#D69C7E')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #D69C7E;"></div>
-                    <div onclick="setColor('#8D5524')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #8D5524;"></div>
-                    <div onclick="setColor('#C68642')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #C68642;"></div>
-                    <div onclick="setColor('#000000')" class="w-10 h-10 rounded-full cursor-pointer border-2 border-white" style="background-color: #000000;"></div>
+                <div class="grid grid-cols-5 gap-3 max-h-48 overflow-y-auto p-1 custom-scrollbar">
+                    <!-- 20 Realistic Lipstick Shades -->
+                    <div onclick="setColor('#9B111E')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white ring-2 ring-rose-200" style="background-color: #9B111E;" title="Ruby Red"></div>
+                    <div onclick="setColor('#DC143C')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #DC143C;" title="Crimson"></div>
+                    <div onclick="setColor('#4E0707')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #4E0707;" title="Deep Burgundy"></div>
+                    <div onclick="setColor('#B22222')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #B22222;" title="Velvet Red"></div>
+                    <div onclick="setColor('#722F37')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #722F37;" title="Wine"></div>
+                    
+                    <div onclick="setColor('#E91E63')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #E91E63;" title="Rose Pink"></div>
+                    <div onclick="setColor('#FF69B4')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #FF69B4;" title="Hot Pink"></div>
+                    <div onclick="setColor('#BA7E7E')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #BA7E7E;" title="Dusty Rose"></div>
+                    <div onclick="setColor('#915F6D')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #915F6D;" title="Mauve"></div>
+                    <div onclick="setColor('#8E4585')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #8E4585;" title="Plum"></div>
+
+                    <div onclick="setColor('#E1A995')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #E1A995;" title="Soft Nude"></div>
+                    <div onclick="setColor('#A67B5B')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #A67B5B;" title="Caramel"></div>
+                    <div onclick="setColor('#D2B48C')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #D2B48C;" title="Tan Nude"></div>
+                    <div onclick="setColor('#3E1E1E')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #3E1E1E;" title="Chocolate"></div>
+                    <div onclick="setColor('#A52A2A')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #A52A2A;" title="Brick Red"></div>
+
+                    <div onclick="setColor('#FF7F50')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #FF7F50;" title="Coral"></div>
+                    <div onclick="setColor('#FF4500')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #FF4500;" title="Sunset Orange"></div>
+                    <div onclick="setColor('#E2725B')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #E2725B;" title="Terracotta"></div>
+                    <div onclick="setColor('#FFCC99')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #FFCC99;" title="Peach"></div>
+                    <div onclick="setColor('#DE3163')" class="w-8 h-8 rounded-full cursor-pointer border-2 border-white" style="background-color: #DE3163;" title="Cherry"></div>
                 </div>
             </div>
             
@@ -139,27 +153,39 @@
     }
 
     function drawFoundation(landmarks) {
-        // Face oval indices for full face coverage
         const oval = [10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149, 150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109];
+        const leftEye = [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246];
+        const rightEye = [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398];
+        const mouth = [61, 185, 40, 39, 37, 0, 267, 269, 270, 408, 291, 375, 321, 405, 314, 17, 84, 181, 91, 146];
         
+        canvasCtx.save();
+        
+        // Use even-odd rule to create holes for eyes and mouth
         canvasCtx.beginPath();
+        
+        const drawIndices = (indices) => {
+            indices.forEach((idx, i) => {
+                const point = landmarks[idx];
+                if (i === 0) canvasCtx.moveTo(point.x * canvasElement.width, point.y * canvasElement.height);
+                else canvasCtx.lineTo(point.x * canvasElement.width, point.y * canvasElement.height);
+            });
+            canvasCtx.closePath();
+        };
+
+        drawIndices(oval);
+        drawIndices(leftEye);
+        drawIndices(rightEye);
+        drawIndices(mouth);
+        
+        canvasCtx.globalAlpha = 0.25;
         canvasCtx.fillStyle = currentColor;
-        canvasCtx.globalAlpha = 0.2; // Very subtle for foundation
+        canvasCtx.fill('evenodd');
         
-        oval.forEach((idx, i) => {
-            const point = landmarks[idx];
-            if (i === 0) canvasCtx.moveTo(point.x * canvasElement.width, point.y * canvasElement.height);
-            else canvasCtx.lineTo(point.x * canvasElement.width, point.y * canvasElement.height);
-        });
+        // Add soft blurring for natural blending
+        canvasCtx.filter = 'blur(8px)';
+        canvasCtx.fill('evenodd');
         
-        canvasCtx.closePath();
-        canvasCtx.fill();
-        
-        // Soften edges
-        canvasCtx.filter = 'blur(10px)';
-        canvasCtx.fill();
-        canvasCtx.filter = 'none';
-        canvasCtx.globalAlpha = 1.0;
+        canvasCtx.restore();
     }
 
     function drawLipstick(landmarks) {
@@ -179,8 +205,8 @@
         drawLipPolygon(landmarks, [...lowerLipOuter, ...lowerLipInner]);
         
         // Add multiple shine/highlight points for realism
-        addLipGloss(landmarks, 14, 20); // Center lower
-        addLipGloss(landmarks, 13, 10); // Center upper
+        addLipGloss(landmarks, 14, 15); // Center lower
+        addLipGloss(landmarks, 13, 8);  // Center upper
     }
 
     function drawLipPolygon(landmarks, indices) {
