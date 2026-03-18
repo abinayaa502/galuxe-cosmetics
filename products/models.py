@@ -82,19 +82,16 @@ class Product(models.Model):
             'Lipstick': 'photo-1631214500115-598fc2cb882e',
             'Foundation': 'photo-1596704017254-9b121068fb31',
             'Mascara': 'photo-1512496015851-a90fb38ba796',
-            'Eyeshadow': 'photo-1712636999789-b8cf0c1d7c08',
+            'Eyeshadow': 'photo-1512496015851-a90fb38ba796',
             'Perfume': 'photo-1541643600914-78b084683601',
             'Shampoo': 'photo-1526947425960-945c6e72858f',
             'Moisturizer': 'photo-1556228720-195a672e8a03',
             'Face Wash': 'photo-1556228578-0d85b1a4d571',
             'Serum': 'photo-1620916566398-39f1143ab7be',
-            'Nail Polish': 'photo-1632345031435-8727f6897d53',
+            'Men': 'photo-1621607512214-68297480165e',
             'Beard Oil': 'photo-1655394009794-df4f7cd8582a',
             'Shaving Cream': 'photo-1695048200681-c0333e837e2b',
-            'Hair oil': 'photo-1643123158300-1b08f8657fba',
             'Grooming Kit': 'photo-1590666270543-9cc2d5257f86',
-            'Lip Gloss': 'photo-1512496015851-a90fb38ba796',
-            'Eyeliner': 'photo-1512496015851-a90fb38ba796',
         }
         
         photo_id = mapping.get(cat_name, 'photo-1620916566398-39f1143ab7be')

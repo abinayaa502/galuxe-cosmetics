@@ -7,69 +7,66 @@ from decimal import Decimal
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'galuxe_project.settings')
 django.setup()
 
-from products.models import Product
+from products.models import Product, Category, Brand
 
 def seed_data():
-    brands = ["GALUXE", "Nykaa", "MAC", "L'Oreal", "Maybelline", "Estée Lauder", "Becca", "NARS", "Tarte"]
-    categories = {
-        "Lipstick": ["Matte", "Glossy", "Liquid", "Bullet", "Velvet"],
-        "Foundation": ["Full Coverage", "Light", "HD", "Serum", "Stick"],
-        "Blush": ["Cream", "Powder", "Tint", "Shimmer"],
-        "Skincare": ["Serum", "Moisturizer", "Cleanser", "Sunscreen"],
-        "Men": ["Beard Oil", "Face Wash", "Hair Wax", "Perfume", "Grooming Kit"]
-    }
-    
-    # Generic URLs for cosmetics (using unsplash IDs)
-    female_cosmetics_images = [
-        "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=400",
-        "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400",
-        "https://images.unsplash.com/photo-1596462502278-27bfdc4033c8?auto=format&fit=crop&w=400",
-        "https://images.unsplash.com/photo-1515688598190-8292788339c3?auto=format&fit=crop&w=400"
-    ]
-    
-    male_cosmetics_images = [
-        "https://images.unsplash.com/photo-1552046122-03184de8560c?auto=format&fit=crop&w=400",
-        "https://images.unsplash.com/photo-1621607512214-68297480165e?auto=format&fit=crop&w=400",
-        "https://images.unsplash.com/photo-1590666270543-9cc2d5257f86?auto=format&fit=crop&w=400"
-    ]
+    print("🧹 Cleaning old data...")
+    Product.objects.all().delete()
+    Category.objects.all().delete()
+    Brand.objects.all().delete()
 
-    print("Seeding 50+ products...")
+    brands_list = ["MAC", "Nykaa", "L'Oreal", "Maybelline", "Estée Lauder", "Becca", "NARS", "Tarte", "GALUXE", "Beardo", "Nivea Men"]
+    categories_dict = {
+        "Lipstick": ["Matte", "Glossy", "Liquid", "Velvet"],
+        "Foundation": ["HD", "Serum", "Full Coverage"],
+        "Blush": ["Cream", "Tint", "Powder"],
+        "Skincare": ["Serum", "Moisturizer", "Cleanser"],
+        "Men": ["Beard Oil", "Face Wash", "Hair Wax", "Grooming Kit"]
+    }
+
+    # Create Category Objects
+    cat_objs = {}
+    for cat_name in categories_dict.keys():
+        obj, _ = Category.objects.get_or_create(name=cat_name)
+        cat_objs[cat_name] = obj
+
+    # Create Brand Objects
+    brand_objs = {}
+    for b_name in brands_list:
+        obj, _ = Brand.objects.get_or_create(name=b_name)
+        brand_objs[b_name] = obj
+
+    print("🌱 Seeding products...")
     for i in range(1, 61):
-        brand = random.choice(brands)
-        cat_key = random.choice(list(categories.keys()))
-        shade_suffix = random.choice(categories[cat_key])
+        brand_name = random.choice(brands_list)
+        cat_key = random.choice(list(categories_dict.keys()))
+        shade_suffix = random.choice(categories_dict[cat_key])
         
-        gender = "Men" if cat_key == "Men" else "Women"
-        image_url = random.choice(male_cosmetics_images if gender == "Men" else female_cosmetics_images)
+        gender = "Men" if cat_key == "Men" or "Men" in brand_name else "Women"
         
-        name = f"{brand} {shade_suffix} {cat_key}"
+        name = f"{brand_name} {shade_suffix} {cat_key}"
         price = Decimal(random.randint(499, 4999))
-        discount = random.randint(5, 40)
+        discount = random.choice([0, 5, 10, 15, 20, 30])
         rating = round(random.uniform(3.5, 5.0), 1)
         stock = random.randint(10, 100)
-        shade = f"Shade {random.randint(100, 999)}" if cat_key != "Skincare" else None
-        
-        # In a real app we'd download the image. Here we use a trick to make it work with ImageField
-        # by creating a dummy record or just using the URL (but our model uses ImageField).
-        # For this demo, I'll use a script that just creates the entries.
-        # Note: ImageField expects a file. I'll use a hack by setting path if I can't download.
-        # Better: let's just use a placeholder string or skip the ImageField requirement for now by allowing null.
         
         Product.objects.create(
             name=name,
-            brand=brand,
-            category=cat_key,
+            brand_ref=brand_objs[brand_name],
+            category_ref=cat_objs[cat_key],
+            brand=brand_name,  # Legacy support
+            category=cat_key,  # Legacy support
             gender=gender,
             price=price,
             discount=discount,
             rating=rating,
-            description=f"Luxury {cat_key} from {brand}. Perfect for enhancing your beauty and glow.",
-            image="placeholder.jpg", # We'll need a placeholder file
+            description=f"Premium {cat_key} from {brand_name}. Designed for a luxury finish and lasting glow.",
+            image="placeholder.jpg",
             stock=stock,
-            shade=shade
+            is_trending=(i < 15)
         )
 
-    print("Success!")
+    print(f"✅ Success! Seeded {Product.objects.count()} products, {Category.objects.count()} categories, and {Brand.objects.count()} brands.")
 
 if __name__ == "__main__":
     seed_data()
