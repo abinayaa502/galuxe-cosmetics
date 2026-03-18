@@ -4,7 +4,7 @@ django-allauth
 django-cors-headers
 django-filter
 django-phonenumber-field
-django-tailwind
+# django-tailwind (removed to debug build error)
 djangorestframework
 python-dateutil
 pytz
@@ -24,7 +24,7 @@ cryptography
 twilio
 phonenumbers
 
-# Computer Vision & AI (Temporarily disabled for debugging)
+# AI - Temporarily disabled for clean build
 # opencv-python-headless
 # opencv-contrib-python-headless
 # mediapipe
