@@ -8,3 +8,5 @@ python manage.py collectstatic --no-input
 python manage.py migrate
 # Seed products if empty (using the script I found)
 python seed_data.py
+# Create default superuser if it doesn't exist
+python create_admin.py
